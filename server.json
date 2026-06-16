@@ -1,8 +1,7 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.ysalitrynskyi/opn-mcp",
   "description": "MCP server for opn.onl: shorten links, analytics, branded QR codes, and link management.",
-  "status": "active",
   "repository": {
     "url": "https://github.com/ysalitrynskyi/opn-mcp",
     "source": "github"
