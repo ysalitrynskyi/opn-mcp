@@ -1,0 +1,27 @@
+# Smithery.ai configuration — https://smithery.ai/docs/config#smitheryyaml
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP server.
+    type: object
+    required:
+      - opnApiKey
+    properties:
+      opnApiKey:
+        type: string
+        description: Your opn.onl API key (create one under Settings → API Keys).
+      opnBaseUrl:
+        type: string
+        default: https://l.opn.onl
+        description: API base URL. Set to your own instance's API for a self-hosted opn.onl.
+  commandFunction:
+    # Produces the CLI command + env that starts opn-mcp over stdio.
+    |-
+    (config) => ({
+      command: 'npx',
+      args: ['-y', 'opn-mcp'],
+      env: Object.assign(
+        { OPN_API_KEY: config.opnApiKey },
+        config.opnBaseUrl ? { OPN_BASE_URL: config.opnBaseUrl } : {}
+      )
+    })
