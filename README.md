@@ -30,6 +30,9 @@ On your opn.onl instance, go to **Settings → API Keys**, create a key, and cop
 
 Restart your client. That's it — it talks to the hosted API (`https://l.opn.onl`) by default.
 
+> Not published to npm yet? Use the GitHub source instead — same config, just swap the `args`:
+> `"args": ["-y", "github:ysalitrynskyi/opn-mcp"]` (it builds on install).
+
 ### Self-hosted instance
 
 Point `OPN_BASE_URL` at your own instance's API host:
