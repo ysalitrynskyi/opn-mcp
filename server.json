@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json",
   "name": "io.github.ysalitrynskyi/opn-mcp",
-  "description": "Shorten links, read click analytics, generate branded QR codes, and manage links on opn.onl — the open-source, self-hostable URL shortener. Works with the hosted service or your own instance.",
+  "description": "MCP server for opn.onl: shorten links, analytics, branded QR codes, and link management.",
   "status": "active",
   "repository": {
     "url": "https://github.com/ysalitrynskyi/opn-mcp",
