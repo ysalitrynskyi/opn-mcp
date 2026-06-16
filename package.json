@@ -1,6 +1,7 @@
 {
   "name": "opn-mcp",
-  "version": "1.0.0",
+  "mcpName": "io.github.ysalitrynskyi/opn-mcp",
+  "version": "1.1.0",
   "description": "Model Context Protocol server for opn.onl — the open-source, self-hostable URL shortener. Lets AI assistants shorten links, read analytics, and manage links.",
   "type": "module",
   "bin": {

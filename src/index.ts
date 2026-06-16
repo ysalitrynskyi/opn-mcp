@@ -2,7 +2,17 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { OpnClient, loadConfig, qs } from "./client.js";
+import { OpnClient, loadConfig, qs, DEFAULT_BASE_URL } from "./client.js";
+
+// Build the client lazily so the server boots — and answers `initialize` +
+// `tools/list` — WITHOUT any API key. Secrets are only needed when a tool is
+// actually called. Registries (Glama, the official registry) introspect the
+// server with no env set, so booting must never require a key.
+let cached: OpnClient | null = null;
+function client(): OpnClient {
+  if (!cached) cached = new OpnClient(loadConfig());
+  return cached;
+}
 
 function text(value: unknown) {
   return {
@@ -23,9 +33,7 @@ function errorText(e: unknown) {
 }
 
 async function main(): Promise<void> {
-  const config = loadConfig();
-  const client = new OpnClient(config);
-  const server = new McpServer({ name: "opn-mcp", version: "1.0.0" });
+  const server = new McpServer({ name: "opn-mcp", version: "1.1.0" });
 
   server.tool(
     "shorten_url",
@@ -40,7 +48,7 @@ async function main(): Promise<void> {
     async (args) => {
       try {
         return text(
-          await client.post("/links", {
+          await client().post("/links", {
             original_url: args.url,
             custom_alias: args.alias,
             title: args.title,
@@ -65,7 +73,7 @@ async function main(): Promise<void> {
     async (args) => {
       try {
         return text(
-          await client.get(`/links${qs({ limit: args.limit, offset: args.offset, search: args.search })}`),
+          await client().get(`/links${qs({ limit: args.limit, offset: args.offset, search: args.search })}`),
         );
       } catch (e) {
         return errorText(e);
@@ -79,7 +87,7 @@ async function main(): Promise<void> {
     { id: z.number().int().describe("The link id") },
     async (args) => {
       try {
-        return text(await client.get(`/links/${args.id}/stats`));
+        return text(await client().get(`/links/${args.id}/stats`));
       } catch (e) {
         return errorText(e);
       }
@@ -99,7 +107,7 @@ async function main(): Promise<void> {
     async (args) => {
       try {
         return text(
-          await client.put(`/links/${args.id}`, {
+          await client().put(`/links/${args.id}`, {
             original_url: args.url,
             title: args.title,
             expires_at: args.expires_at,
@@ -118,7 +126,7 @@ async function main(): Promise<void> {
     { id: z.number().int().describe("The link id") },
     async (args) => {
       try {
-        await client.del(`/links/${args.id}`);
+        await client().del(`/links/${args.id}`);
         return text(`Link ${args.id} deleted.`);
       } catch (e) {
         return errorText(e);
@@ -142,7 +150,7 @@ async function main(): Promise<void> {
           logo: args.logo ? "true" : undefined,
           format: args.format && args.format !== "png" ? args.format : undefined,
         });
-        const { base64, mimeType } = await client.getBinary(`/links/${args.id}/qr${query}`);
+        const { base64, mimeType } = await client().getBinary(`/links/${args.id}/qr${query}`);
         if (mimeType.includes("svg")) {
           return text(Buffer.from(base64, "base64").toString("utf8"));
         }
@@ -159,7 +167,7 @@ async function main(): Promise<void> {
     { url: z.string().url().describe("The URL to check") },
     async (args) => {
       try {
-        return text(await client.post("/links/health-check", { url: args.url }));
+        return text(await client().post("/links/health-check", { url: args.url }));
       } catch (e) {
         return errorText(e);
       }
@@ -169,7 +177,7 @@ async function main(): Promise<void> {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   // stdout is the MCP transport — log to stderr only.
-  console.error(`opn-mcp connected → ${config.baseUrl}`);
+  console.error(`opn-mcp ready (base: ${process.env.OPN_BASE_URL?.trim() || DEFAULT_BASE_URL})`);
 }
 
 main().catch((e) => {
