@@ -1,0 +1,50 @@
+{
+  "name": "opn-mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for opn.onl — the open-source, self-hostable URL shortener. Lets AI assistants shorten links, read analytics, and manage links.",
+  "type": "module",
+  "bin": {
+    "opn-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "model-context-protocol",
+    "opn.onl",
+    "url-shortener",
+    "claude",
+    "ai"
+  ],
+  "author": "ysalitrynskyi",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ysalitrynskyi/opn-mcp.git"
+  },
+  "homepage": "https://opn.onl",
+  "bugs": {
+    "url": "https://github.com/ysalitrynskyi/opn-mcp/issues"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}
