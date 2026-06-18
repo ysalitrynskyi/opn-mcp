@@ -1,5 +1,7 @@
 # opn-mcp
 
+[![opn-mcp MCP server](https://glama.ai/mcp/servers/ysalitrynskyi/opn-mcp/badges/score.svg)](https://glama.ai/mcp/servers/ysalitrynskyi/opn-mcp)
+
 An [MCP](https://modelcontextprotocol.io) server for **[opn.onl](https://opn.onl)** — the open-source, self-hostable URL shortener. It lets AI assistants (Claude Desktop, Cursor, etc.) shorten links, read analytics, generate QR codes, and manage links in natural language.
 
 Works against the hosted service **or your own self-hosted instance**.
